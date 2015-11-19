@@ -1,5 +1,5 @@
 {
-  "name": "print preview proxy",
+  "name": "print-preview-proxy",
   "version": "0.0.1",
   "description": "json to xml proxy",
   "main": "index.js",
