@@ -42,8 +42,8 @@ var parseString = require('xml2js').parseString;
  */
 var xml2json = function (xmlContent, callback) {
   parseString(xmlContent, function (err, result) {
-    console.log('------- XML -> JSON');
-    console.log(xmlContent);
+    // console.log('------- XML -> JSON');
+    // console.log(xmlContent);
     callback(result);
   });
 };
@@ -52,9 +52,9 @@ var xml2json = function (xmlContent, callback) {
  * Convert JSON to XML
  */
 var json2xml = function (content) {
-  console.log('------- JSON -> XML');
-  console.log(JSON.stringify(content));
-  console.log("->");
+  // console.log('------- JSON -> XML');
+  // console.log(JSON.stringify(content));
+  // console.log("->");
 
   var builder = new xml2js.Builder({
     rootName: 'format',
@@ -63,7 +63,7 @@ var json2xml = function (content) {
     // renderOpts:  { 'pretty': true, 'indent': ' ', 'newline': '\n' }
   });
   var xmlContent = builder.buildObject(content);
-  console.log(xmlContent);
+  // console.log(xmlContent);
   return xmlContent;
 };
 
@@ -86,12 +86,12 @@ console.time(path);
     body: xmlContent
   }, function (error, backendResponse, body) {
     xml2json(body, function(jsonBody) {
-      console.log('--------- Response JSON: ----------');
-      console.log(JSON.stringify(jsonBody));
+      // console.log('--------- Response JSON: ----------');
+      // console.log(JSON.stringify(jsonBody));
       response.send(jsonBody);
     });
-    console.log('--------- Response XML: ----------');
-    console.log(body);
+    // console.log('--------- Response XML: ----------');
+    // console.log(body);
     console.timeEnd(path);
   });
 };
@@ -111,7 +111,7 @@ app.get('/', function (request, response) {
 
 app.post('/textformater/format', function (request, response){
   request.accepts('application/json');
-  console.log('\n============================  '+new Date());
+  // console.log('\n============================  '+new Date());
   getFormatting(request.body, response);
 });
 
