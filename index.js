@@ -43,7 +43,7 @@ var parseString = require('xml2js').parseString;
 var xml2json = function (xmlContent, callback) {
   parseString(xmlContent, function (err, result) {
     console.log('------- XML -> JSON');
-    console.dir(result);
+    console.log(xmlContent);
     callback(result);
   });
 };
@@ -53,7 +53,7 @@ var xml2json = function (xmlContent, callback) {
  */
 var json2xml = function (content) {
   console.log('------- JSON -> XML');
-  console.log(content);
+  console.log(JSON.stringify(content));
   console.log("->");
 
   var builder = new xml2js.Builder({
@@ -63,7 +63,7 @@ var json2xml = function (content) {
     // renderOpts:  { 'pretty': true, 'indent': ' ', 'newline': '\n' }
   });
   var xmlContent = builder.buildObject(content);
-  console.dir(xmlContent);
+  console.log(xmlContent);
   return xmlContent;
 };
 
@@ -74,7 +74,7 @@ var json2xml = function (content) {
 var getFormatting = function (content, response) {
   var xmlContent = json2xml(content);
   var path = '/textformater/format';
-
+console.time(path);
   request({
     method: 'POST',
     url: apiServerUrl + path,
@@ -87,13 +87,12 @@ var getFormatting = function (content, response) {
   }, function (error, backendResponse, body) {
     xml2json(body, function(jsonBody) {
       console.log('--------- Response JSON: ----------');
-      console.log(jsonBody);
+      console.log(JSON.stringify(jsonBody));
       response.send(jsonBody);
     });
-    console.log('Status:', response.statusCode);
-    console.log('Headers:', JSON.stringify(response.headers));
     console.log('--------- Response XML: ----------');
     console.log(body);
+    console.timeEnd(path);
   });
 };
 
@@ -101,9 +100,6 @@ var getFormatting = function (content, response) {
 //======== App Routes
 
 app.get('/', function (request, response) {
-  console.log(request.method);
-  console.log(request.headers);
-  console.log(request.agent);
   response.on('data', function (chunk) {
     console.log('BODY: ' + chunk);
   });
@@ -116,10 +112,6 @@ app.get('/', function (request, response) {
 app.post('/textformater/format', function (request, response){
   request.accepts('application/json');
   console.log('\n============================  '+new Date());
-  console.log(request.method);
-  console.log(request.headers);
-  console.log(request.body);
-  // response.send(request.body);
   getFormatting(request.body, response);
 });
 
