@@ -73,7 +73,8 @@ var json2xml = function (content) {
  */
 var getFormatting = function (content, response) {
   var xmlContent = json2xml(content);
-  var path = '/textformater/format';
+  // var path = '/textformater/format';
+  var path = '/textformater/format/1';
 console.time(path);
   request({
     method: 'POST',
