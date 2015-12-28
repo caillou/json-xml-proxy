@@ -189,15 +189,129 @@ MockData.prototype.endpoints = {
     }
   },
 
+  'getDocumentMetadata': {
+    'post': {
+      'data': `<?xml version="1.0" encoding="UTF-8"?>
+<Api>
+	<ApiCms cmsCommand="getDocumentMetadata">
+		<Metadata
+		  LivingdocsId="23"
+		  Dateiname="M5DVT"
+		  Stichwort="Testkasten Matterhorn"
+		  TemplateId=""
+		  Publikation="nzz"
+		  Ressort="vm"
+		  Erscheinungstag="15.01.2014"
+		  Status="editable"
+    >
+		</Metadata>
+	</ApiCms>
+</Api>
+`
+    }
+  },
+
   'getPreview': {
     'post': {
-      'data': ``
+      'data': `<?xml version="1.0" encoding="UTF-8"?>
+<Api>
+	<ApiCms cmsCommand="getPreview">
+    <FormattedArticle xmlns="http://api.finkundpartner.de/schema/component/hugo_text/textFormat/1.0"
+              xmlns:fup="http://www.finkundpartner.de/xslt/functions">
+       <article>
+          <content>
+             <row column="0" id="1" number="2" type="title">Separatistischer </row>
+             <row column="0" id="2" number="3" type="title">Triumphzug für </row>
+             <row column="0" id="3" number="4" type="title">Artur Mas</row>
+          </content>
+          <content>
+             <row column="0" id="1" number="7" type="subtitle">Wirtschaftsbeziehungen fördern</row>
+          </content>
+          <content>
+             <row column="0" id="1" number="10" type="text">Für Kataloniens Regional-Regierungs-</row>
+             <row column="0" id="2" number="11" type="text">chef Artur Mas, der am Donnerstag in </row>
+             <row column="0" id="3" number="12" type="text">Barcelona wegen einer illegalen Volks-</row>
+             <row column="0" id="4" number="13" type="text">befragung vor dem Richter auszusagen </row>
+             <row column="0" id="5" number="14" type="text">hatte, wurde der Gerichtstermin zum </row>
+             <row column="0" id="6" number="15" type="text">separatistischen Triumphzug: Schon am </row>
+             <row column="0" id="7" number="16" type="text">Morgen hatten tausende Unabhängig-</row>
+             <row column="0" id="8" number="17" type="text">keitsfahnen schwenkende Katalanen </row>
+             <row column="0" id="9" number="18" type="text">Mas vor dem Betreten des Justizgebäu-</row>
+             <row column="0" id="10" number="19" type="text">des zugejubelt. Flankiert wurde er auch </row>
+             <row column="0" id="11" number="20" type="text">von 400 angereisten katalanischen Bür-</row>
+             <row column="0" id="12" number="21" type="text">germeistern, die dem Nationalisten </row>
+             <row column="0" id="13" number="22" type="text">ostentativ ihren Amtsstab zum Gruss </row>
+             <row column="0" id="14" number="23" type="text">entgegen schwenkten.</row>
+          </content>
+          <content>
+             <row column="0" id="1" number="25" type="text">In einer kurzen Erklärung im Roose-</row>
+             <row column="0" id="2" number="26" type="text">velt-Saal des Weissen Hauses, umrahmt </row>
+             <row column="0" id="3" number="27" type="text">von Vizepräsident Biden und den Spit-</row>
+             <row column="0" id="4" number="28" type="text">zen der amerikanischen Streitkräfte, </row>
+             <row column="0" id="5" number="29" type="text">nahm Obama Abschied von einem </row>
+             <row column="0" id="6" number="30" type="text">lange verfolgten Ziel: die beiden Kriege, </row>
+             <row column="0" id="7" number="31" type="text">die er von seinem Vorgänger übernom-</row>
+             <row column="0" id="8" number="32" type="text">men hatte, bis zur Stabübergabe an sei-</row>
+             <row column="0" id="9" number="33" type="text">nen Nachfolger oder seine Nachfolgerin </row>
+             <row column="0" id="10" number="34" type="text">zu beenden. Gleichzeitig korrigierte er </row>
+             <row column="0" id="11" number="35" type="text">einen weitreichenden Fehler, den er be-</row>
+             <row column="0" id="12" number="36" type="text">gangen hatte, als er für den gestaffelten </row>
+             <row column="0" id="13" number="37" type="text">Abzug der amerikanischen Truppen – </row>
+             <row column="0" id="14" number="38" type="text">und in deren Windschatten der verbün-</row>
+             <row column="0" id="15" number="39" type="text">deten internationalen Kontingente – </row>
+             <row column="0" id="16" number="40" type="text">bindende Fristen nannte.</row>
+          </content>
+          <content>
+             <row column="0" id="1" number="42" type="text">Für Kataloniens Regional-Regie-</row>
+             <row column="0" id="2" number="43" type="text">rungschef Artur Mas, der am Donners-</row>
+             <row column="0" id="3" number="44" type="text">tag in Barcelona wegen einer illegalen </row>
+             <row column="0" id="4" number="45" type="text">Volksbefragung vor dem Richter auszu-</row>
+             <row column="0" id="5" number="46" type="text">sagen hatte, wurde der Gerichtstermin </row>
+             <row column="0" id="6" number="47" type="text">zum separatistischen Triumphzug: </row>
+             <row column="0" id="7" number="48" type="text">Schon am Morgen hatten tausende Un-</row>
+             <row column="0" id="8" number="49" type="text">abhängigkeitsfahnen schwenkende Ka-</row>
+             <row column="0" id="9" number="50" type="text">talanen Mas vor dem Betreten des Jus-</row>
+             <row column="0" id="10" number="51" type="text">tizgebäudes zugejubelt. Flankiert wurde </row>
+             <row column="0" id="11" number="52" type="text">er auch von 400 angereisten katalani-</row>
+             <row column="0" id="12" number="53" type="text">schen Bürgermeistern, die dem Natio-</row>
+             <row column="1" exceeded="true" id="13" number="57" type="text">nalisten ostentativ ihren Amtsstab zum </row>
+             <row column="1" exceeded="true" id="14" number="58" type="text">Gruss entgegen schwenkten.</row>
+          </content>
+          <content>
+             <row column="1" exceeded="true" id="1" number="61" type="text"/>
+          </content>
+          <content>
+             <row column="1" exceeded="true" id="1" number="63" type="text">IM CMS ZUSATZTEXT FÜR </row>
+             <row column="1" exceeded="true" id="2" number="64" type="text">Lead: Kurze Erklärungen des Katala-</row>
+             <row column="1" exceeded="true" id="3" number="65" type="text">nen-Chefs vor Gericht</row>
+          </content>
+          <content>
+             <row column="1" exceeded="true" id="1" number="67" type="text">IM CMS ZUSATZTEXT FÜR Au-</row>
+             <row column="1" exceeded="true" id="2" number="68" type="text">tor: Cornelia Derichsweiler, Madrid</row>
+          </content>
+          <previews>
+             <preview type="article">https://hugo-test.nzz.ch/hugo_test/hugo_files/printschnittstelle/4711_20151228_163640.jpg</preview>
+          </previews>
+       </article>
+    </FormattedArticle>
+	</ApiCms>
+</Api>
+`
     }
   },
 
   'export': {
     'post': {
-      'data': `<?xml version="1.0" encoding="UTF-8"?><Api><ApiCms Status="OK"></ApiCms></Api>`
+      'data': `<?xml version="1.0" encoding="UTF-8"?>
+<Api>
+	<ApiCms cmsCommand="getPreview">
+    <Export
+      Status="OK"
+    >
+    </Export>
+	</ApiCms>
+</Api>
+`
     }
   }
 

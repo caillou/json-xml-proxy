@@ -27,7 +27,26 @@ var endpoints = {
   ]
 };
 
-//======== App Setup
+var i;
+
+
+/**
+ * XML parser for requests, body-parser won't do it
+ * actually accepts any type of format
+ */
+function xmlParser(request, response, next) {
+  var data = '';
+  request.setEncoding('utf8');
+  console.log(request.headers);
+  request.on('data', function(chunk) {
+    console.log('..', chunk);
+    data += chunk;
+  });
+  request.on('end', function() {
+    request.body = data;
+    next();
+  });
+}
 
 app.set('port', (process.env.PORT || 5000));
 // app.use(express.static(__dirname + '/public'));
@@ -45,18 +64,17 @@ app.use(function (request, response, next) {
       next();
     }
 });
-app.use(bodyParser.json());
+//app.use(jsonParser);
+app.use(xmlParser);
 
 
 //======== JSON-XML conversion
-
-var parseString = require('xml2js').parseString;
 
 /**
  * Convert XML to JSON
  */
 var xml2json = function (xmlContent, callback) {
-  parseString(xmlContent, function (err, result) {
+  xml2js.parseString(xmlContent, function (err, result) {
     // console.log('------- XML -> JSON');
     // console.log(xmlContent);
     callback(result);
@@ -147,35 +165,78 @@ function createAppGet(endpoint) {
   }
 }
 
-for (var i in endpoints.get) {
+for (i = 0; i < endpoints.get.length; i++) {
   appgets[i] = createAppGet(endpoints.get[i]);
 }
 
-for (var j in endpoints.get) {
-  appgets[j]();
+for (i = 0; i < endpoints.get.length; i++) {
+  appgets[i]();
 }
 
 
-app.post('/getPreview', function (request, response) {
+app.get('/getDocumentMetadata', function (request, response) {
   response.on('data', function (chunk) {
     console.log('BODY: ' + chunk);
   });
+  var data = mock.endpoints['getDocumentMetadata'].post.data;
+  console.log('xml GET', data);
 
   response.format({
-    'text/xml': function(){
-      response.send('<?xml version="1.0" encoding="UTF-8"?><foo>' + data + '</foo>');
+    'text/xml': function () {
+      //response.send('<?xml version="1.0" encoding="UTF-8"?><foo>' + data + '</foo>');
+      response.send(data);
+    }
+  });
+});
+
+app.post('/getDocumentMetadata', function (request, response) {
+  //response.on('data', function (chunk) {
+  //  console.log('BODY: ' + chunk);
+  //});
+  var data = mock.endpoints['getDocumentMetadata'].post.data;
+  console.log('xml POST', request.body);
+  xml2json(request.body, function(json) {
+    console.log(json);
+  });
+  data = data + request.body;
+  //data = request.body + data;
+  console.log(data);
+  xml2json(data, function(json) {
+    console.log(JSON.stringify(json));
+  });
+
+  response.format({
+    'text/xml': function () {
+      response.send(data);
+      //response.send('<?xml version="1.0" encoding="UTF-8"?><foo>' + request.body + '</foo>');
+    }
+  });
+});
+
+app.post('/getPreview', function (request, response) {
+  var data = mock.endpoints['getPreview'].post.data;
+  console.log('xml POST', request.body);
+  data = data + request.body;
+  //data = request.body + data;
+  console.log(data);
+
+  response.format({
+    'text/xml': function () {
+      response.send(data);
     }
   });
 });
 
 app.post('/export', function (request, response) {
-  response.on('data', function (chunk) {
-    console.log('BODY: ' + chunk);
-  });
+  var data = mock.endpoints['export'].post.data;
+  console.log('xml POST', request.body);
+  data = data + request.body;
+  //data = request.body + data;
+  console.log(data);
 
   response.format({
-    'text/xml': function(){
-      response.send('<?xml version="1.0" encoding="UTF-8"?><foo>' + data + '</foo>');
+    'text/xml': function () {
+      response.send(data);
     }
   });
 });
