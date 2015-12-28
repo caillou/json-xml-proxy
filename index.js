@@ -1,3 +1,6 @@
+const NAME = 'Print Prototype Proxy';
+const VERSION = '1.0';
+
 var express = require('express');
 var bodyParser = require('body-parser');
 var request = require('request');
@@ -8,7 +11,6 @@ var mock = require('./mock.js');
 var app = express();
 var jsonParser = bodyParser.json();
 
-var version = '1.0';
 // var deployUrl = 'https://print-preview-proxy.herokuapp.com';
 var apiServerUrl = 'https://hugo-api-ext-test.nzz.ch';
 var endpoints = {
@@ -145,8 +147,8 @@ console.time(path);
 
 app.get('/', function (request, response) {
   response.json({
-    hello: 'world',
-    version: version
+    name: NAME,
+    version: VERSION
   });
 });
 
