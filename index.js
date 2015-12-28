@@ -1,5 +1,5 @@
 const NAME = 'Print Prototype Proxy';
-const VERSION = '1.0';
+const VERSION = '1.1';
 
 var express = require('express');
 var bodyParser = require('body-parser');
@@ -113,14 +113,14 @@ var json2xml = function (content) {
 };
 
 /**
- * Take JSON article, format using API server, write formatted article
- * back to response object given
+ * Used by prototype
+ * Take JSON article, format using prototype API server, write formatted
+ * article back to response object given
  */
 var getFormatting = function (content, response) {
   var xmlContent = json2xml(content);
-  // var path = '/textformater/format';
   var path = '/textformater/format/1';
-console.time(path);
+  console.time(path);
   request({
     method: 'POST',
     url: apiServerUrl + path,
@@ -136,8 +136,51 @@ console.time(path);
       // console.log(JSON.stringify(jsonBody));
       response.send(jsonBody);
     });
-     console.log('--------- Response XML: ----------');
-     console.log(body);
+    console.log('--------- Response XML: ----------');
+    console.log(body);
+    console.timeEnd(path);
+  });
+};
+
+/**
+ * Used by Livingdocs Editor
+ * Take XML article, format using prototype API server, if there is a
+ * problem retrieving the formatted article use mock data as fallback
+ */
+var getPreview = function (xmlContent, response) {
+  var path = '/textformater/format/1'; // this will probably change
+  console.time(path);
+  request({
+    method: 'POST',
+    url: apiServerUrl + path,
+    headers: {
+      'Content-Type': 'application/xml',
+      'Accept': 'application/xml'
+    },
+    body: xmlContent
+  }, function (error, backendResponse, data) {
+    var index = data.indexOf('<formated');
+
+    if ((backendResponse.statusCode !== 200) || (index < 0)) {
+      // there was a problem, return mock data
+      data = mock.endpoints['getPreview'].post.data;
+
+    } else {
+      // prototype data received
+      // make prototype data conform with required structure
+      data = data.substr(0, index) +
+        '<Api><ApiCms cmsCommand="getPreview">' +
+        data.substr(index) +
+        '</ApiCms></Api>';
+    }
+
+    response.format({
+      'text/xml': function () {
+        response.send(data);
+      }
+    });
+    console.log('--------- Response XML: ----------');
+    console.log(data);
     console.timeEnd(path);
   });
 };
@@ -188,9 +231,6 @@ for (i = 0; i < endpoints.get.length; i++) {
 
 
 app.get('/getDocumentMetadata', function (request, response) {
-  response.on('data', function (chunk) {
-    console.log('BODY: ' + chunk);
-  });
   var data = mock.endpoints['getDocumentMetadata'].post.data;
   console.log('xml GET', data);
 
@@ -203,20 +243,11 @@ app.get('/getDocumentMetadata', function (request, response) {
 });
 
 app.post('/getDocumentMetadata', function (request, response) {
-  //response.on('data', function (chunk) {
-  //  console.log('BODY: ' + chunk);
-  //});
   var data = mock.endpoints['getDocumentMetadata'].post.data;
   console.log('xml POST', request.body);
-  xml2json(request.body, function(json) {
-    console.log(json);
-  });
+  // add request body to response data to show it was received
   data = data + request.body;
-  //data = request.body + data;
   console.log(data);
-  xml2json(data, function(json) {
-    console.log(JSON.stringify(json));
-  });
 
   response.format({
     'text/xml': function () {
@@ -229,23 +260,16 @@ app.post('/getDocumentMetadata', function (request, response) {
 app.post('/getPreview', function (request, response) {
   var data = mock.endpoints['getPreview'].post.data;
   console.log('xml POST', request.body);
-  // add request body to response data to show it was received
-  data = data + request.body;
-  //data = request.body + data;
+  data = request.body;
   console.log(data);
-
-  response.format({
-    'text/xml': function () {
-      response.send(data);
-    }
-  });
+  getPreview(data, response);
 });
 
 app.post('/export', function (request, response) {
   var data = mock.endpoints['export'].post.data;
   console.log('xml POST', request.body);
+  // add request body to response data to show it was received
   data = data + request.body;
-  //data = request.body + data;
   console.log(data);
 
   response.format({

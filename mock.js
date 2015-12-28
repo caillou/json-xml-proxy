@@ -216,7 +216,7 @@ MockData.prototype.endpoints = {
       'data': `<?xml version="1.0" encoding="UTF-8"?>
 <Api>
 	<ApiCms cmsCommand="getPreview">
-    <FormattedArticle xmlns="http://api.finkundpartner.de/schema/component/hugo_text/textFormat/1.0"
+    <formated xmlns="http://api.finkundpartner.de/schema/component/hugo_text/textFormat/1.0"
               xmlns:fup="http://www.finkundpartner.de/xslt/functions">
        <article>
           <content>
@@ -293,7 +293,7 @@ MockData.prototype.endpoints = {
              <preview type="article">https://hugo-test.nzz.ch/hugo_test/hugo_files/printschnittstelle/4711_20151228_163640.jpg</preview>
           </previews>
        </article>
-    </FormattedArticle>
+    </formated>
 	</ApiCms>
 </Api>
 `
