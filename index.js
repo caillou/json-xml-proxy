@@ -3,6 +3,7 @@ var bodyParser = require('body-parser');
 var request = require('request');
 var util = require('util');
 var xml2js = require('xml2js');
+var mock = require('./mock.js');
 
 var app = express();
 
@@ -11,6 +12,20 @@ var jsonParser = bodyParser.json();
 // var deployUrl = 'https://print-preview-proxy.herokuapp.com';
 var apiServerUrl = 'https://hugo-api-ext-test.nzz.ch';
 
+var endpoints = {
+  'get': [
+    'getRequestSystemList',
+    'getPublicationList',
+    'getPublicationDays',
+    'getDepartmentList',
+    'getTemplateList',
+    'getLayoutList'
+  ],
+  'post': [
+    'getPreview',
+    'export'
+  ]
+};
 
 //======== App Setup
 
@@ -63,7 +78,7 @@ var json2xml = function (content) {
     // renderOpts:  { 'pretty': true, 'indent': ' ', 'newline': '\n' }
   });
   var xmlContent = builder.buildObject(content);
-  // console.log(xmlContent);
+   console.log(xmlContent);
   return xmlContent;
 };
 
@@ -91,8 +106,8 @@ console.time(path);
       // console.log(JSON.stringify(jsonBody));
       response.send(jsonBody);
     });
-    // console.log('--------- Response XML: ----------');
-    // console.log(body);
+     console.log('--------- Response XML: ----------');
+     console.log(body);
     console.timeEnd(path);
   });
 };
@@ -101,10 +116,6 @@ console.time(path);
 //======== App Routes
 
 app.get('/', function (request, response) {
-  response.on('data', function (chunk) {
-    console.log('BODY: ' + chunk);
-  });
-
   response.json({
     hello: 'world'
   });
@@ -114,6 +125,59 @@ app.post('/textformater/format', function (request, response){
   request.accepts('application/json');
   // console.log('\n============================  '+new Date());
   getFormatting(request.body, response);
+});
+
+var appgets = [];
+function createAppGet(endpoint) {
+  return function() {
+    //console.log(endpoint);
+    app.get('/' + endpoint, function (request, response){
+      request.accepts('application/json');
+      // console.log('\n============================  '+new Date());
+      var data = mock.endpoints[endpoint].get.data;
+      console.log('xml', data);
+
+      // Return XML
+      response.format({
+        'text/xml': function(){
+          response.send(data);
+        }
+      });
+    });
+  }
+}
+
+for (var i in endpoints.get) {
+  appgets[i] = createAppGet(endpoints.get[i]);
+}
+
+for (var j in endpoints.get) {
+  appgets[j]();
+}
+
+
+app.post('/getPreview', function (request, response) {
+  response.on('data', function (chunk) {
+    console.log('BODY: ' + chunk);
+  });
+
+  response.format({
+    'text/xml': function(){
+      response.send('<?xml version="1.0" encoding="UTF-8"?><foo>' + data + '</foo>');
+    }
+  });
+});
+
+app.post('/export', function (request, response) {
+  response.on('data', function (chunk) {
+    console.log('BODY: ' + chunk);
+  });
+
+  response.format({
+    'text/xml': function(){
+      response.send('<?xml version="1.0" encoding="UTF-8"?><foo>' + data + '</foo>');
+    }
+  });
 });
 
 
