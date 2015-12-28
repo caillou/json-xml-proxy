@@ -37,9 +37,7 @@ var i;
 function xmlParser(request, response, next) {
   var data = '';
   request.setEncoding('utf8');
-  console.log(request.headers);
   request.on('data', function(chunk) {
-    console.log('..', chunk);
     data += chunk;
   });
   request.on('end', function() {
@@ -108,7 +106,6 @@ var json2xml = function (content) {
     // renderOpts:  { 'pretty': true, 'indent': ' ', 'newline': '\n' }
   });
   var xmlContent = builder.buildObject(content);
-   console.log(xmlContent);
   return xmlContent;
 };
 
@@ -136,9 +133,9 @@ var getFormatting = function (content, response) {
       // console.log(JSON.stringify(jsonBody));
       response.send(jsonBody);
     });
-    console.log('--------- Response XML: ----------');
-    console.log(body);
-    console.timeEnd(path);
+    //console.log('--------- Response XML: ----------');
+    //console.log(body);
+    //console.timeEnd(path);
   });
 };
 
@@ -179,9 +176,9 @@ var getPreview = function (xmlContent, response) {
         response.send(data);
       }
     });
-    console.log('--------- Response XML: ----------');
-    console.log(data);
-    console.timeEnd(path);
+    //console.log('--------- Response XML: ----------');
+    //console.log(data);
+    //console.timeEnd(path);
   });
 };
 
@@ -209,7 +206,6 @@ function createAppGet(endpoint) {
       request.accepts('application/json');
       // console.log('\n============================  '+new Date());
       var data = mock.endpoints[endpoint].get.data;
-      console.log('xml', data);
 
       // Return XML
       response.format({
@@ -232,7 +228,6 @@ for (i = 0; i < endpoints.get.length; i++) {
 
 app.get('/getDocumentMetadata', function (request, response) {
   var data = mock.endpoints['getDocumentMetadata'].post.data;
-  console.log('xml GET', data);
 
   response.format({
     'text/xml': function () {
@@ -244,10 +239,9 @@ app.get('/getDocumentMetadata', function (request, response) {
 
 app.post('/getDocumentMetadata', function (request, response) {
   var data = mock.endpoints['getDocumentMetadata'].post.data;
-  console.log('xml POST', request.body);
   // add request body to response data to show it was received
   data = data + request.body;
-  console.log(data);
+  //console.log(data);
 
   response.format({
     'text/xml': function () {
@@ -259,18 +253,16 @@ app.post('/getDocumentMetadata', function (request, response) {
 
 app.post('/getPreview', function (request, response) {
   var data = mock.endpoints['getPreview'].post.data;
-  console.log('xml POST', request.body);
   data = request.body;
-  console.log(data);
+  //console.log(data);
   getPreview(data, response);
 });
 
 app.post('/export', function (request, response) {
   var data = mock.endpoints['export'].post.data;
-  console.log('xml POST', request.body);
   // add request body to response data to show it was received
   data = data + request.body;
-  console.log(data);
+  //console.log(data);
 
   response.format({
     'text/xml': function () {
