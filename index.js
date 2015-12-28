@@ -66,7 +66,7 @@ app.use(function (request, response, next) {
 //app.use(xmlParser);
 
 app.use(function (request, response, next) {
-  if (request.is('text/xml')) {
+  if (request.is('application/xml')) {
     xmlParser(request, response, next);
 
   } else if (request.is('application/json')) {
@@ -172,7 +172,7 @@ var getPreview = function (xmlContent, response) {
     }
 
     response.format({
-      'text/xml': function () {
+      'application/xml': function () {
         response.send(data);
       }
     });
@@ -209,7 +209,7 @@ function createAppGet(endpoint) {
 
       // Return XML
       response.format({
-        'text/xml': function(){
+        'application/xml': function(){
           response.send(data);
         }
       });
@@ -230,7 +230,7 @@ app.get('/getDocumentMetadata', function (request, response) {
   var data = mock.endpoints['getDocumentMetadata'].post.data;
 
   response.format({
-    'text/xml': function () {
+    'application/xml': function () {
       //response.send('<?xml version="1.0" encoding="UTF-8"?><foo>' + data + '</foo>');
       response.send(data);
     }
@@ -244,7 +244,7 @@ app.post('/getDocumentMetadata', function (request, response) {
   //console.log(data);
 
   response.format({
-    'text/xml': function () {
+    'application/xml': function () {
       response.send(data);
       //response.send('<?xml version="1.0" encoding="UTF-8"?><foo>' + request.body + '</foo>');
     }
@@ -265,7 +265,7 @@ app.post('/export', function (request, response) {
   //console.log(data);
 
   response.format({
-    'text/xml': function () {
+    'application/xml': function () {
       response.send(data);
     }
   });
