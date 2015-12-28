@@ -6,12 +6,11 @@ var xml2js = require('xml2js');
 var mock = require('./mock.js');
 
 var app = express();
-
 var jsonParser = bodyParser.json();
 
+var version = '1.0';
 // var deployUrl = 'https://print-preview-proxy.herokuapp.com';
 var apiServerUrl = 'https://hugo-api-ext-test.nzz.ch';
-
 var endpoints = {
   'get': [
     'getRequestSystemList',
@@ -26,7 +25,6 @@ var endpoints = {
     'export'
   ]
 };
-
 var i;
 
 
@@ -63,13 +61,9 @@ app.use(function (request, response, next) {
   } else {
     next();
   }
-
-
-
 });
 //app.use(jsonParser);
 //app.use(xmlParser);
-
 
 app.use(function (request, response, next) {
   if (request.is('text/xml')) {
@@ -82,6 +76,7 @@ app.use(function (request, response, next) {
     next();
   }
 });
+
 
 //======== JSON-XML conversion
 
@@ -150,7 +145,8 @@ console.time(path);
 
 app.get('/', function (request, response) {
   response.json({
-    hello: 'world'
+    hello: 'world',
+    version: version
   });
 });
 
