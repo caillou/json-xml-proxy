@@ -53,20 +53,35 @@ app.set('port', (process.env.PORT || 5000));
 
 // Allow CORS
 app.use(function (request, response, next) {
-    response.header('Access-Control-Allow-Origin', '*');
-    response.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-    response.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+  response.header('Access-Control-Allow-Origin', '*');
+  response.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+  response.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
 
-    // intercept OPTIONS method
-    if ('OPTIONS' == request.method) {
-      response.sendStatus(200);
-    } else {
-      next();
-    }
+  // intercept OPTIONS method
+  if ('OPTIONS' == request.method) {
+    response.sendStatus(200);
+  } else {
+    next();
+  }
+
+
+
 });
 //app.use(jsonParser);
-app.use(xmlParser);
+//app.use(xmlParser);
 
+
+app.use(function (request, response, next) {
+  if (request.is('text/xml')) {
+    xmlParser(request, response, next);
+
+  } else if (request.is('application/json')) {
+    jsonParser(request, response, next);
+
+  } else {
+    next();
+  }
+});
 
 //======== JSON-XML conversion
 
@@ -216,6 +231,7 @@ app.post('/getDocumentMetadata', function (request, response) {
 app.post('/getPreview', function (request, response) {
   var data = mock.endpoints['getPreview'].post.data;
   console.log('xml POST', request.body);
+  // add request body to response data to show it was received
   data = data + request.body;
   //data = request.body + data;
   console.log(data);
