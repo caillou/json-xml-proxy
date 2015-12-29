@@ -1,5 +1,5 @@
 const NAME = 'Print Prototype Proxy';
-const VERSION = '1.2';
+const VERSION = '1.3';
 
 var express = require('express');
 var bodyParser = require('body-parser');
@@ -135,7 +135,7 @@ var getFormatting = function (content, response) {
     });
     //console.log('--------- Response XML: ----------');
     //console.log(body);
-    //console.timeEnd(path);
+    console.timeEnd(path);
   });
 };
 
@@ -178,7 +178,7 @@ var getPreview = function (xmlContent, response) {
     });
     //console.log('--------- Response XML: ----------');
     //console.log(data);
-    //console.timeEnd(path);
+    console.timeEnd(path);
   });
 };
 
