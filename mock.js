@@ -195,7 +195,7 @@ MockData.prototype.endpoints = {
 <Api>
 	<ApiCms cmsCommand="getDocumentMetadata">
 		<Metadata
-		  LivingdocsId="23"
+		  LivingdocsId="ldid01"
 		  Dateiname="M5DVT"
 		  Stichwort="Testkasten Matterhorn"
 		  TemplateId=""

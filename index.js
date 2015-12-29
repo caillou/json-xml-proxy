@@ -1,5 +1,5 @@
 const NAME = 'Print Prototype Proxy';
-const VERSION = '1.1';
+const VERSION = '1.2';
 
 var express = require('express');
 var bodyParser = require('body-parser');
@@ -141,7 +141,7 @@ var getFormatting = function (content, response) {
 
 /**
  * Used by Livingdocs Editor
- * Take XML article, format using prototype API server, if there is a
+ * Take XML article, try to format using prototype API server, if there is a
  * problem retrieving the formatted article use mock data as fallback
  */
 var getPreview = function (xmlContent, response) {
@@ -239,9 +239,8 @@ app.get('/getDocumentMetadata', function (request, response) {
 
 app.post('/getDocumentMetadata', function (request, response) {
   var data = mock.endpoints['getDocumentMetadata'].post.data;
-  // add request body to response data to show it was received
-  data = data + request.body;
-  //console.log(data);
+  // add request body to response to show it was received
+  response.append('Request-Data', request.body);
 
   response.format({
     'application/xml': function () {
@@ -260,9 +259,8 @@ app.post('/getPreview', function (request, response) {
 
 app.post('/export', function (request, response) {
   var data = mock.endpoints['export'].post.data;
-  // add request body to response data to show it was received
-  data = data + request.body;
-  //console.log(data);
+  // add request body to response to show it was received
+  response.append('Request-Data', request.body);
 
   response.format({
     'application/xml': function () {
