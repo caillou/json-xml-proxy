@@ -2,7 +2,7 @@ var MockData = function() {};
 
 MockData.prototype.endpoints = {
   'getRequestSystemList': {
-    'get': {
+    'post': {
       'data': `<?xml version="1.0" encoding="UTF-8"?>
 <Api>
 	<ApiCms cmsCommand="getRequestSystemList" Standard="">
@@ -24,7 +24,7 @@ MockData.prototype.endpoints = {
   },
 
   'getPublicationList': {
-    'get': {
+    'post': {
       'data': `<?xml version="1.0" encoding="UTF-8"?>
 <Api>
 	<ApiCms cmsCommand="getPublicationList" Standard="">
@@ -43,7 +43,7 @@ MockData.prototype.endpoints = {
   },
 
   'getPublicationDays': {
-    'get': {
+    'post': {
       'data': `<?xml version="1.0" encoding="UTF-8"?>
 <Api>
 	<ApiCms cmsCommand="getPublicationDays" Publikation="nzz" VonDatum="17.12.2015" BisDatum="24.12.2015">
@@ -63,7 +63,7 @@ MockData.prototype.endpoints = {
   },
 
   'getDepartmentList': {
-    'get': {
+    'post': {
       'data': `<?xml version="1.0" encoding="UTF-8"?>
 <Api>
 	<ApiCms cmsCommand="getDepartmentList" Publikation="nzz" RessortgruppeZugehoerigkeit="" RessortKurz="">
@@ -85,7 +85,7 @@ MockData.prototype.endpoints = {
   },
 
   'getTemplateList': {
-    'get': {
+    'post': {
       'data': `<?xml version="1.0" encoding="UTF-8"?>
 <Api>
 	<ApiCms cmsCommand="getTemplateList" Publikation="nzz" Ressort="" Spalten="" Dateiname="">
@@ -173,7 +173,7 @@ MockData.prototype.endpoints = {
   },
 
   'getLayoutList': {
-    'get': {
+    'post': {
       'data': `<?xml version="1.0" encoding="UTF-8"?>
 <Api>
 	<ApiCms cmsCommand="getLayoutList" Publikation="nzz" Erscheinungstag="15.01.2014" Seite="11" Ressort="" Dateiname="">

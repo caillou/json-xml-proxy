@@ -1,5 +1,5 @@
 const NAME = 'Print Prototype Proxy';
-const VERSION = '1.3';
+const VERSION = '1.4';
 
 var express = require('express');
 var bodyParser = require('body-parser');
@@ -13,20 +13,21 @@ var jsonParser = bodyParser.json();
 
 // var deployUrl = 'https://print-preview-proxy.herokuapp.com';
 var apiServerUrl = 'https://hugo-api-ext-test.nzz.ch';
-var endpoints = {
-  'get': [
-    'getRequestSystemList',
-    'getPublicationList',
-    'getPublicationDays',
-    'getDepartmentList',
-    'getTemplateList',
-    'getLayoutList'
-  ],
-  'post': [
-    'getPreview',
-    'export'
-  ]
-};
+
+// dumbEndpoints only return mock data no matter what input
+// endpoints not listed here need set up app.get/post separately
+// TODO: for testing getDocumentMetadata, export cases it would be good
+// to allow for config in request to set response data
+var dumbEndpoints = [
+  'getRequestSystemList',
+  'getPublicationList',
+  'getPublicationDays',
+  'getDepartmentList',
+  'getTemplateList',
+  'getLayoutList',
+  'getDocumentMetadata',
+  'export'
+];
 var i;
 
 
@@ -199,13 +200,13 @@ app.post('/textformater/format', function (request, response){
 });
 
 var appgets = [];
-function createAppGet(endpoint) {
+function createAppPost(endpoint) {
   return function() {
     //console.log(endpoint);
-    app.get('/' + endpoint, function (request, response){
-      request.accepts('application/json');
+    app.post('/' + endpoint, function (request, response){
+      //request.accepts('application/xml');
       // console.log('\n============================  '+new Date());
-      var data = mock.endpoints[endpoint].get.data;
+      var data = mock.endpoints[endpoint].post.data;
 
       // Return XML
       response.format({
@@ -217,56 +218,31 @@ function createAppGet(endpoint) {
   }
 }
 
-for (i = 0; i < endpoints.get.length; i++) {
-  appgets[i] = createAppGet(endpoints.get[i]);
+for (i = 0; i < dumbEndpoints.length; i++) {
+  appgets[i] = createAppPost(dumbEndpoints[i]);
 }
 
-for (i = 0; i < endpoints.get.length; i++) {
+for (i = 0; i < dumbEndpoints.length; i++) {
   appgets[i]();
 }
 
-
-app.get('/getDocumentMetadata', function (request, response) {
-  var data = mock.endpoints['getDocumentMetadata'].post.data;
-
-  response.format({
-    'application/xml': function () {
-      //response.send('<?xml version="1.0" encoding="UTF-8"?><foo>' + data + '</foo>');
-      response.send(data);
-    }
-  });
-});
-
-app.post('/getDocumentMetadata', function (request, response) {
-  var data = mock.endpoints['getDocumentMetadata'].post.data;
-  // add request body to response to show it was received
-  response.append('Request-Data', request.body);
-
-  response.format({
-    'application/xml': function () {
-      response.send(data);
-      //response.send('<?xml version="1.0" encoding="UTF-8"?><foo>' + request.body + '</foo>');
-    }
-  });
-});
+// To test get requests add a 'get' endpoint and use something like this:
+//app.get('/getDocumentMetadata', function (request, response) {
+//  var data = mock.endpoints['getDocumentMetadata'].post.data;
+//
+//  response.format({
+//    'application/xml': function () {
+//      //response.send('<?xml version="1.0" encoding="UTF-8"?><foo>' + data + '</foo>');
+//      response.send(data);
+//    }
+//  });
+//});
 
 app.post('/getPreview', function (request, response) {
   var data = mock.endpoints['getPreview'].post.data;
   data = request.body;
   //console.log(data);
   getPreview(data, response);
-});
-
-app.post('/export', function (request, response) {
-  var data = mock.endpoints['export'].post.data;
-  // add request body to response to show it was received
-  response.append('Request-Data', request.body);
-
-  response.format({
-    'application/xml': function () {
-      response.send(data);
-    }
-  });
 });
 
 
